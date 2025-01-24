@@ -10,8 +10,8 @@
 
  ## Game Description
  "Brick Game" is a version of the classic "Tetris" game.
- Control the tetromino with the arrow keys.
- Space - rotate the tetromino.
+ Control the tetramino with the arrow keys.
+ Space - rotate the tetramino.
  'P' - pause.
  'Q' - quit the game.
 
@@ -25,7 +25,6 @@
 * `make dist` - Archive the project  
 * `make test` - Run unit tests  
 * `make gcov_report` - Generate a gcov report as an HTML page  
-* `make valgrind` - Check tests for memory leaks  
 * `make cppcheck` - Run cppcheck utility  
 * `make clean` - Remove unnecessary files  
 

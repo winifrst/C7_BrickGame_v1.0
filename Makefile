@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -std=c11 -Wall -Wextra -Werror
 LDFLAGS = -lncurses
-CHECKFLAGS = -pthread -lcheck_pic -lrt -lm -lsubunit
+CHECKFLAGS = -pthread -lcheck -lrt -lm -lsubunit
 
 BACKEND_SRC = $(wildcard brick_game/tetris/*.c)
 TEST_SRC = $(wildcard test/*.c)
@@ -60,7 +60,7 @@ dist:
 	mkdir -p dist
 	tar cvzf dist/BrickGame_1.0.tgz brick_game gui test FSM_tetris.jpeg Doxyfile Makefile mainpage.dox
 
-play:
+play: tetris
 	./build/tetris
 
 clean:
@@ -70,6 +70,3 @@ clean:
 
 cppcheck: 
 	cppcheck --enable=all --suppress=missingIncludeSystem brick_game/tetris/*.c brick_game/*.c gui/cli/*.c tests/*.c
-
-style: 
-	clang-format -n */*.[ch] */*/*.[ch] && clang-format -i */*.[ch] */*/*.[ch] 
