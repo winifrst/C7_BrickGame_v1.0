@@ -3,23 +3,20 @@
 
  # BrickGame_v1.0
 
- This is the documentation for the "Brick Game" project. Here you will find:
- - Main features.
- - How to run the project.
- - Details about the implementation.
+ ## Game Description  
+ "Brick Game" is a version of the classic "Tetris" game.  
+ Control the tetramino with the **arrow keys**.  
+ **Enter** - start new game.  
+ **Space** - rotate the tetramino.  
+ **P** - pause.  
+ **Q** - quit the game.  
 
- ## Game Description
- "Brick Game" is a version of the classic "Tetris" game.
- Control the tetramino with the arrow keys.
- Space - rotate the tetramino.
- 'P' - pause.
- 'Q' - quit the game.
+ ## Getting Started  
+ The program is built using a Makefile.  
 
- ## Getting Started
- The program is built using a Makefile.
-
-* `make install` - Compile the game into the 'install' directory  
-* `make uninstall` - Remove the program  
+* `make play` - Compile the game and run it  
+* `make install` - Compile the game and install it into the `/usr/local/bin/` directory  
+* `make uninstall` - Remove the program from the `/usr/local/bin/` directory  
 * `make dvi` - Compile the documentation  
 * `make run_dvi` - Run the documentation  
 * `make dist` - Archive the project  
@@ -28,8 +25,8 @@
 * `make cppcheck` - Run cppcheck utility  
 * `make clean` - Remove unnecessary files  
 
- ## Contact
- - Telegram: @winifrst
+ ## Contact  
+ - Telegram: @winifrst  
 
 
 */
