@@ -91,7 +91,7 @@ bool run_game_loop() {
 /**
  * @brief Frees dynamically allocated memory for the `gameInfo` structure.
  *
- * This function deallocates the memory for the game field and next tetromino
+ * This function deallocates the memory for the game field and next tetramino
  * arrays in the `gameInfo` structure.
  *
  * @param gameInfo A pointer to the `GameInfo_t` structure containing the game
@@ -121,7 +121,7 @@ void free_game_info(GameInfo_t *gameInfo) {
  * @brief Prints the game field on the screen.
  *
  * This function displays the current game field in the `game_win` window. It
- * handles rendering of the tetrominoes and empty spaces, adjusting the display
+ * handles rendering of the tetraminoes and empty spaces, adjusting the display
  * based on whether the game is paused or not.
  *
  * @param gameInfo A pointer to the `GameInfo_t` structure containing the game
@@ -154,14 +154,14 @@ void print_field(const GameInfo_t *gameInfo, Interface_t *windows) {
 }
 
 /**
- * @brief Prints the next tetromino in the upcoming window.
+ * @brief Prints the next tetramino in the upcoming window.
  *
- * This function displays the next tetromino that will fall in the `next_win`
- * window. It visualizes the upcoming tetromino and adjusts the display based on
+ * This function displays the next tetramino that will fall in the `next_win`
+ * window. It visualizes the upcoming tetramino and adjusts the display based on
  * whether the game is paused.
  *
  * @param gameInfo A pointer to the `GameInfo_t` structure containing the next
- * tetromino data.
+ * tetramino data.
  * @param windows A pointer to the `Interface_t` structure containing the
  * ncurses window pointers.
  */

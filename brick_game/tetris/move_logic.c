@@ -5,15 +5,15 @@
 #include "backend.h"
 
 /**
- * @brief Moves the current tetromino based on the user input.
+ * @brief Moves the current tetramino based on the user input.
  *
- * This function processes user input to move the tetromino left, right, down,
+ * This function processes user input to move the tetramino left, right, down,
  * or rotate, and performs actions based on those inputs.
  *
  * @param actual_info A pointer to the ModelInfo_t structure holding the game
  * state.
  */
-void move_tetromino(ModelInfo_t *actual_info) {
+void move_tetramino(ModelInfo_t *actual_info) {
   if (actual_info->hold) {
     switch (actual_info->user_action) {
       case Left:
@@ -27,8 +27,8 @@ void move_tetromino(ModelInfo_t *actual_info) {
         break;
       case Action:
         if (!is_rotation_blocked()) {
-          copy_matrix(actual_info->current_tetromino,
-                      actual_info->collision_test_tetromino, TETR_SIZE,
+          copy_matrix(actual_info->current_tetramino,
+                      actual_info->collision_test_tetramino, TETR_SIZE,
                       TETR_SIZE);
         }
         break;
@@ -49,9 +49,9 @@ void move_tetromino(ModelInfo_t *actual_info) {
 }
 
 /**
- * @brief Moves the current tetromino to the left.
+ * @brief Moves the current tetramino to the left.
  *
- * This function checks whether the tetromino can be moved left and moves it
+ * This function checks whether the tetramino can be moved left and moves it
  * if possible.
  *
  * @param actual_info A pointer to the ModelInfo_t structure holding the game
@@ -63,9 +63,9 @@ void move_left(ModelInfo_t *actual_info) {
 }
 
 /**
- * @brief Moves the current tetromino to the right.
+ * @brief Moves the current tetramino to the right.
  *
- * This function checks whether the tetromino can be moved right and moves it
+ * This function checks whether the tetramino can be moved right and moves it
  * if possible.
  *
  * @param actual_info A pointer to the ModelInfo_t structure holding the game
@@ -77,9 +77,9 @@ void move_right(ModelInfo_t *actual_info) {
 }
 
 /**
- * @brief Checks if a rotation is blocked for the current tetromino.
+ * @brief Checks if a rotation is blocked for the current tetramino.
  *
- * This function checks if rotating the current tetromino will cause a collision
+ * This function checks if rotating the current tetramino will cause a collision
  * and returns an appropriate error code.
  *
  * @return Returns the error code indicating whether rotation is blocked or not.
@@ -87,9 +87,9 @@ void move_right(ModelInfo_t *actual_info) {
 int is_rotation_blocked() {
   ModelInfo_t *actual_info = get_info();
   int error = NO_COLLISION;
-  copy_matrix(actual_info->collision_test_tetromino,
-              actual_info->current_tetromino, TETR_SIZE, TETR_SIZE);
-  rotate(actual_info->current_type, &(actual_info->collision_test_tetromino));
+  copy_matrix(actual_info->collision_test_tetramino,
+              actual_info->current_tetramino, TETR_SIZE, TETR_SIZE);
+  rotate(actual_info->current_type, &(actual_info->collision_test_tetramino));
   error = check_rotate_collision(actual_info);
 
   int origin_x_position = actual_info->x_position;
@@ -119,33 +119,33 @@ int is_rotation_blocked() {
 }
 
 /**
- * @brief Rotates the current tetromino based on its type.
+ * @brief Rotates the current tetramino based on its type.
  *        Uses either a left or right rotation depending on the type.
  *
- * @param type The type of tetromino to rotate.
- * @param straight A pointer to the current tetromino's matrix.
+ * @param type The type of tetramino to rotate.
+ * @param straight A pointer to the current tetramino's matrix.
  */
-void rotate(TetrominoType_t type, int ***straight) {
+void rotate(TetraminoType_t type, int ***straight) {
   switch (type) {
-    case O_tetromino:
+    case O_tetramino:
       break;
-    case I_tetromino:
-    case S_tetromino:
-    case Z_tetromino:
+    case I_tetramino:
+    case S_tetramino:
+    case Z_tetramino:
       (*straight)[1][2] ? rotate_left(straight) : rotate_right(straight);
       break;
-    case T_tetromino:
-    case L_tetromino:
-    case J_tetromino:
+    case T_tetramino:
+    case L_tetramino:
+    case J_tetramino:
       rotate_right(straight);
       break;
   }
 }
 
 /**
- * @brief Rotates the tetromino counterclockwise (left).
+ * @brief Rotates the tetramino counterclockwise (left).
  *
- * @param straight A pointer to the matrix representing the current tetromino.
+ * @param straight A pointer to the matrix representing the current tetramino.
  */
 void rotate_left(int ***straight) {
   int **rotated = NULL;
@@ -162,9 +162,9 @@ void rotate_left(int ***straight) {
 }
 
 /**
- * @brief Rotates the tetromino clockwise (right).
+ * @brief Rotates the tetramino clockwise (right).
  *
- * @param straight A pointer to the matrix representing the current tetromino.
+ * @param straight A pointer to the matrix representing the current tetramino.
  */
 void rotate_right(int ***straight) {
   int **rotated = NULL;
@@ -181,12 +181,12 @@ void rotate_right(int ***straight) {
 }
 
 /**
- * @brief Moves the current tetromino down if it doesn't collide with the base
+ * @brief Moves the current tetramino down if it doesn't collide with the base
  * or floor.
  *
  * @param actual_info A pointer to the game model information.
  */
-void shift_tetromino(ModelInfo_t *actual_info) {
+void shift_tetramino(ModelInfo_t *actual_info) {
   actual_info->y_position++;
   if (is_move_collision(actual_info)) {
     actual_info->y_position--;
@@ -196,26 +196,26 @@ void shift_tetromino(ModelInfo_t *actual_info) {
 }
 
 /**
- * @brief Attaches the current tetromino to the game field and checks for full
+ * @brief Attaches the current tetramino to the game field and checks for full
  * lines.
  *
  * @param actual_info A pointer to the game model information.
  */
-void attach_tetromino(ModelInfo_t *actual_info) {
-  set_tetromino_on_field(actual_info->field_base, actual_info);
+void attach_tetramino(ModelInfo_t *actual_info) {
+  set_tetramino_on_field(actual_info->field_base, actual_info);
   calculate_lines(actual_info);
   actual_info->state = Spawn;
 }
 
 /**
- * @brief Checks if the tetromino can move sideways or downward without
+ * @brief Checks if the tetramino can move sideways or downward without
  * collisions.
  *
- * This function checks if the current tetromino can be moved by
+ * This function checks if the current tetramino can be moved by
  * analyzing possible collisions with the game field boundaries and other
- * tetrominos. Each block of the tetromino is checked for movement.
+ * tetraminos. Each block of the tetramino is checked for movement.
  *
- * @param actual_info Pointer to the structure containing the current tetromino
+ * @param actual_info Pointer to the structure containing the current tetramino
  * and game field information.
  * @return Error code
  */
@@ -227,7 +227,7 @@ int is_move_collision(const ModelInfo_t *actual_info) {
       int x_offset = actual_info->x_position + j;
       int y_offset = actual_info->y_position + i;
 
-      if (actual_info->current_tetromino[i][j] != 0 && !error) {
+      if (actual_info->current_tetramino[i][j] != 0 && !error) {
         if (y_offset >= FIELD_HEIGHT) {
           error = FLOOR_COLLISION;
         } else if (x_offset < 0) {
@@ -243,17 +243,17 @@ int is_move_collision(const ModelInfo_t *actual_info) {
 }
 
 /**
- * @brief Checks if the tetromino can rotate.
+ * @brief Checks if the tetramino can rotate.
  *
- * This function checks if the tetromino can be rotated by analyzing possible
+ * This function checks if the tetramino can be rotated by analyzing possible
  * collisions with other blocks or field boundaries. All blocks of the rotated
- * tetromino are checked for collision.
+ * tetramino are checked for collision.
  *
- * @param actual_info Pointer to the structure containing the current tetromino
+ * @param actual_info Pointer to the structure containing the current tetramino
  * and game field information.
  * @return Error code:
  *         - `NO_COLLISION` (0) — rotation is possible.
- *         - `FLOOR_COLLISION` — collision with the floor (below the tetromino).
+ *         - `FLOOR_COLLISION` — collision with the floor (below the tetramino).
  *         - `LEFT_COLLISION` — collision with the left boundary.
  *         - `RIGHT_COLLISION` — collision with the right boundary.
  */
@@ -265,9 +265,9 @@ int check_rotate_collision(const ModelInfo_t *actual_info) {
       int y_offset = actual_info->y_position + i;
 
       if (y_offset >= FIELD_HEIGHT &&
-          actual_info->collision_test_tetromino[i][j] != 0) {
+          actual_info->collision_test_tetramino[i][j] != 0) {
         error = FLOOR_COLLISION;
-      } else if (actual_info->collision_test_tetromino[i][j] != 0) {
+      } else if (actual_info->collision_test_tetramino[i][j] != 0) {
         if (x_offset < 0) {
           error = LEFT_COLLISION;
         } else if (x_offset >= FIELD_WIDTH) {

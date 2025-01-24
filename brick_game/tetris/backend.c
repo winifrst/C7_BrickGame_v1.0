@@ -29,8 +29,8 @@ GameInfo_t updateCurrentState() {
   if (actual_info->pause != EXIT_GAME) {
     copy_matrix(result.field, actual_info->field_base, FIELD_HEIGHT,
                 FIELD_WIDTH);
-    copy_matrix(result.next, actual_info->next_tetromino, TETR_SIZE, TETR_SIZE);
-    set_tetromino_on_field(result.field, actual_info);
+    copy_matrix(result.next, actual_info->next_tetramino, TETR_SIZE, TETR_SIZE);
+    set_tetramino_on_field(result.field, actual_info);
 
     result.score = actual_info->score;
     result.high_score = actual_info->high_score;
@@ -73,11 +73,11 @@ ModelInfo_t *get_info() {
     actual_info.user_action = Up;
     actual_info.hold = false;
     error += create_matrix(&actual_info.field_base, FIELD_HEIGHT, FIELD_WIDTH);
-    error += create_matrix(&actual_info.next_tetromino, TETR_SIZE, TETR_SIZE);
-    actual_info.next_type = generate_next_tetromino(actual_info.next_tetromino);
+    error += create_matrix(&actual_info.next_tetramino, TETR_SIZE, TETR_SIZE);
+    actual_info.next_type = generate_next_tetramino(actual_info.next_tetramino);
     error +=
-        create_matrix(&actual_info.current_tetromino, TETR_SIZE, TETR_SIZE);
-    error += create_matrix(&actual_info.collision_test_tetromino, TETR_SIZE,
+        create_matrix(&actual_info.current_tetramino, TETR_SIZE, TETR_SIZE);
+    error += create_matrix(&actual_info.collision_test_tetramino, TETR_SIZE,
                            TETR_SIZE);
     actual_info.current_type = 0;
     actual_info.x_position = SPAWN_X_POSITION;
@@ -111,16 +111,16 @@ void run_actions_by_state(ModelInfo_t *actual_info) {
       initialize_game(actual_info);
       break;
     case Spawn:
-      spawn_tetromino(actual_info);
+      spawn_tetramino(actual_info);
       break;
     case Moving:
-      move_tetromino(actual_info);
+      move_tetramino(actual_info);
       break;
     case Shifting:
-      shift_tetromino(actual_info);
+      shift_tetramino(actual_info);
       break;
     case Attaching:
-      attach_tetromino(actual_info);
+      attach_tetramino(actual_info);
       break;
     case Pause_state:
       pause_actions(actual_info);
@@ -163,22 +163,22 @@ void initialize_game(ModelInfo_t *actual_info) {
 }
 
 /**
- * @brief Spawns a new tetromino and initializes its state.
+ * @brief Spawns a new tetramino and initializes its state.
  *
- * This function copies the next tetromino into the current tetromino and sets
- * its initial position. It also generates the next tetromino.
+ * This function copies the next tetramino into the current tetramino and sets
+ * its initial position. It also generates the next tetramino.
  *
  * @* @param actual_info A pointer to the ModelInfo_t structure holding the game
  * state.
  */
-void spawn_tetromino(ModelInfo_t *actual_info) {
-  copy_matrix(actual_info->current_tetromino, actual_info->next_tetromino,
+void spawn_tetramino(ModelInfo_t *actual_info) {
+  copy_matrix(actual_info->current_tetramino, actual_info->next_tetramino,
               TETR_SIZE, TETR_SIZE);
 
   actual_info->current_type = actual_info->next_type;
-  reset_matrix(actual_info->next_tetromino, TETR_SIZE, TETR_SIZE);
+  reset_matrix(actual_info->next_tetramino, TETR_SIZE, TETR_SIZE);
 
-  actual_info->next_type = generate_next_tetromino(actual_info->next_tetromino);
+  actual_info->next_type = generate_next_tetramino(actual_info->next_tetramino);
 
   actual_info->x_position = SPAWN_X_POSITION;
   actual_info->y_position = SPAWN_Y_POSITION;
@@ -296,12 +296,12 @@ void run_terminate_actions(ModelInfo_t *actual_info) {
   }
   if (actual_info->field_base)
     remove_matrix(&(actual_info)->field_base, FIELD_HEIGHT);
-  if (actual_info->current_tetromino)
-    remove_matrix(&(actual_info)->current_tetromino, TETR_SIZE);
-  if (actual_info->next_tetromino)
-    remove_matrix(&(actual_info)->next_tetromino, TETR_SIZE);
-  if (actual_info->collision_test_tetromino)
-    remove_matrix(&(actual_info)->collision_test_tetromino, TETR_SIZE);
+  if (actual_info->current_tetramino)
+    remove_matrix(&(actual_info)->current_tetramino, TETR_SIZE);
+  if (actual_info->next_tetramino)
+    remove_matrix(&(actual_info)->next_tetramino, TETR_SIZE);
+  if (actual_info->collision_test_tetramino)
+    remove_matrix(&(actual_info)->collision_test_tetramino, TETR_SIZE);
   actual_info->pause = EXIT_GAME;
 }
 
@@ -311,18 +311,18 @@ void run_terminate_actions(ModelInfo_t *actual_info) {
  * the figure is not a square.
  *
  * @param[out] next A two-dimensional array representing the shape of the
- * generated tetromino. This array will be filled within the function.
+ * generated tetramino. This array will be filled within the function.
  * Memory for the 5x5 array must be allocated before calling the function.
- * @return The type of the generated tetromino (a value from the TetrominoType_t
+ * @return The type of the generated tetramino (a value from the TetraminoType_t
  * enumeration).
  *
  * @note It is recommended to call `srand(time(NULL))` before calling this
  * function.
  */
-TetrominoType_t generate_next_tetromino(int **next) {
-  TetrominoType_t random = 1 + (rand() % 7);
-  fill_tetromino(next, random);
-  if (random != O_tetromino) {
+TetraminoType_t generate_next_tetramino(int **next) {
+  TetraminoType_t random = 1 + (rand() % 7);
+  fill_tetramino(next, random);
+  if (random != O_tetramino) {
     int random_rotation = rand() % 4;
     while (random_rotation--) rotate(random, &next);
   }
@@ -343,39 +343,39 @@ TetrominoType_t generate_next_tetromino(int **next) {
 // | .  .  .  .  . | .  .  .  .  . | .  .  .  .  . |
 // -------------------------------------------------
 /**
- * @brief Fills the provided matrix with the shape of a tetromino.
+ * @brief Fills the provided matrix with the shape of a tetramino.
  *
- * @param filled A 2D array to store the tetromino's shape.
- * @param num The type of the tetromino to generate.
+ * @param filled A 2D array to store the tetramino's shape.
+ * @param num The type of the tetramino to generate.
  */
-void fill_tetromino(int **filled, TetrominoType_t num) {
+void fill_tetramino(int **filled, TetraminoType_t num) {
   switch (num) {
-    case O_tetromino:
-      for (int i = 1; i <= 2; i++) filled[1][i] = O_tetromino;
-      for (int j = 1; j <= 2; j++) filled[2][j] = O_tetromino;
+    case O_tetramino:
+      for (int i = 1; i <= 2; i++) filled[1][i] = O_tetramino;
+      for (int j = 1; j <= 2; j++) filled[2][j] = O_tetramino;
       break;
-    case I_tetromino:
-      for (int i = 0; i <= 3; i++) filled[2][i] = I_tetromino;
+    case I_tetramino:
+      for (int i = 0; i <= 3; i++) filled[2][i] = I_tetramino;
       break;
-    case T_tetromino:
-      filled[1][2] = T_tetromino;
-      for (int i = 1; i <= 3; i++) filled[2][i] = T_tetromino;
+    case T_tetramino:
+      filled[1][2] = T_tetramino;
+      for (int i = 1; i <= 3; i++) filled[2][i] = T_tetramino;
       break;
-    case S_tetromino:
-      for (int i = 1; i <= 2; i++) filled[i][1] = S_tetromino;
-      for (int j = 2; j <= 3; j++) filled[j][2] = S_tetromino;
+    case S_tetramino:
+      for (int i = 1; i <= 2; i++) filled[i][1] = S_tetramino;
+      for (int j = 2; j <= 3; j++) filled[j][2] = S_tetramino;
       break;
-    case Z_tetromino:
-      for (int i = 1; i <= 2; i++) filled[2][i] = Z_tetromino;
-      for (int j = 2; j <= 3; j++) filled[3][j] = Z_tetromino;
+    case Z_tetramino:
+      for (int i = 1; i <= 2; i++) filled[2][i] = Z_tetramino;
+      for (int j = 2; j <= 3; j++) filled[3][j] = Z_tetramino;
       break;
-    case J_tetromino:
-      filled[1][1] = J_tetromino;
-      for (int i = 1; i <= 3; i++) filled[2][i] = J_tetromino;
+    case J_tetramino:
+      filled[1][1] = J_tetramino;
+      for (int i = 1; i <= 3; i++) filled[2][i] = J_tetramino;
       break;
-    case L_tetromino:
-      filled[1][3] = L_tetromino;
-      for (int i = 1; i <= 3; i++) filled[2][i] = L_tetromino;
+    case L_tetramino:
+      filled[1][3] = L_tetramino;
+      for (int i = 1; i <= 3; i++) filled[2][i] = L_tetramino;
       break;
   }
 }
@@ -456,7 +456,7 @@ void remove_matrix(int ***matrix, int rows) {
 /**
  * @brief Frees dynamically allocated memory for the `GameInfo_t` structure.
  *
- * This function deallocates the memory for the game field and next tetromino
+ * This function deallocates the memory for the game field and next tetramino
  * arrays in the `gameInfo` structure.
  *
  * @param gameInfo A pointer to the `GameInfo_t` structure containing the game
@@ -505,17 +505,17 @@ void reset_matrix(int **src, int rows, int columns) {
 }
 
 /**
- * @brief Sets the current tetromino on the game field.
+ * @brief Sets the current tetramino on the game field.
  *
- * This function updates the game field by placing the tetromino in its current
- * position. All tetromino blocks are placed at the appropriate positions on the
+ * This function updates the game field by placing the tetramino in its current
+ * position. All tetramino blocks are placed at the appropriate positions on the
  * field.
  *
  * @param field The game field.
- * @param actual_info Pointer to the structure with the current tetromino
+ * @param actual_info Pointer to the structure with the current tetramino
  * information.
  */
-void set_tetromino_on_field(int **field, ModelInfo_t *actual_info) {
+void set_tetramino_on_field(int **field, ModelInfo_t *actual_info) {
   for (int y = 0; y < TETR_SIZE; y++) {
     for (int x = 0; x < TETR_SIZE; x++) {
       int offset_y = actual_info->y_position + y;
@@ -523,8 +523,8 @@ void set_tetromino_on_field(int **field, ModelInfo_t *actual_info) {
 
       if (offset_y >= 0 && offset_y < FIELD_HEIGHT && offset_x >= 0 &&
           offset_x < FIELD_WIDTH) {
-        if (actual_info->current_tetromino[y][x] != 0) {
-          field[offset_y][offset_x] = actual_info->current_tetromino[y][x];
+        if (actual_info->current_tetramino[y][x] != 0) {
+          field[offset_y][offset_x] = actual_info->current_tetramino[y][x];
         }
       }
     }

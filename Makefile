@@ -36,13 +36,11 @@ gcov_report: test
 	rm -f tetris test_runner tetris_lib.a tetris_test.a *.o *.gcno *.gcda *.gcov coverage.info
 
 install: clean tetris
-	rm -rf install
-	mkdir -p install
-	@mv build/tetris install
+	cp build/tetris /usr/local/bin/tetris
 	make clean
 
 uninstall:
-	-rm -f install/tetris score.txt
+	-rm -f /usr/local/bin/tetris /usr/local/bin/score.txt
 
 # sudo apt install texlive-full
 # sudo apt-get install doxygen
