@@ -1,6 +1,7 @@
 #include "test.h"
 
-START_TEST(update_state) {
+START_TEST(update_state)
+{
   GameInfo_t test = {NULL, NULL, 0, 0, 0, 0, 0};
   ck_assert_ptr_eq(test.field, NULL);
   ck_assert_ptr_eq(test.next, NULL);
@@ -19,20 +20,21 @@ START_TEST(update_state) {
 }
 END_TEST
 
-START_TEST(get_model_info) {
+START_TEST(get_model_info)
+{
   ModelInfo_t actual_info = {0};
   ck_assert_ptr_eq(actual_info.field_base, NULL);
-  ck_assert_ptr_eq(actual_info.current_tetromino, NULL);
-  ck_assert_ptr_eq(actual_info.next_tetromino, NULL);
-  ck_assert_ptr_eq(actual_info.collision_test_tetromino, NULL);
+  ck_assert_ptr_eq(actual_info.current_tetramino, NULL);
+  ck_assert_ptr_eq(actual_info.next_tetramino, NULL);
+  ck_assert_ptr_eq(actual_info.collision_test_tetramino, NULL);
 
   actual_info = *get_info();
 
   ck_assert_int_eq(actual_info.state, Start_state);
   ck_assert_ptr_nonnull(actual_info.field_base);
-  ck_assert_ptr_nonnull(actual_info.current_tetromino);
-  ck_assert_ptr_nonnull(actual_info.next_tetromino);
-  ck_assert_ptr_nonnull(actual_info.collision_test_tetromino);
+  ck_assert_ptr_nonnull(actual_info.current_tetramino);
+  ck_assert_ptr_nonnull(actual_info.next_tetramino);
+  ck_assert_ptr_nonnull(actual_info.collision_test_tetramino);
   ck_assert_int_eq(actual_info.x_position, SPAWN_X_POSITION);
   ck_assert_int_eq(actual_info.y_position, SPAWN_Y_POSITION);
   ck_assert_int_eq(actual_info.score, 0);
@@ -42,34 +44,38 @@ START_TEST(get_model_info) {
   ck_assert_int_eq(actual_info.pause, 0);
 
   remove_matrix(&actual_info.field_base, FIELD_HEIGHT);
-  remove_matrix(&actual_info.current_tetromino, TETR_SIZE);
-  remove_matrix(&actual_info.next_tetromino, TETR_SIZE);
-  remove_matrix(&actual_info.collision_test_tetromino, TETR_SIZE);
+  remove_matrix(&actual_info.current_tetramino, TETR_SIZE);
+  remove_matrix(&actual_info.next_tetramino, TETR_SIZE);
+  remove_matrix(&actual_info.collision_test_tetramino, TETR_SIZE);
 }
 END_TEST
 
-START_TEST(spawn) {
+START_TEST(spawn)
+{
   ModelInfo_t *actual_info = (ModelInfo_t *)malloc(sizeof(ModelInfo_t));
 
   create_matrix(&actual_info->field_base, FIELD_HEIGHT, FIELD_WIDTH);
-  create_matrix(&actual_info->next_tetromino, TETR_SIZE, TETR_SIZE);
-  create_matrix(&actual_info->current_tetromino, TETR_SIZE, TETR_SIZE);
-  create_matrix(&actual_info->collision_test_tetromino, TETR_SIZE, TETR_SIZE);
+  create_matrix(&actual_info->next_tetramino, TETR_SIZE, TETR_SIZE);
+  create_matrix(&actual_info->current_tetramino, TETR_SIZE, TETR_SIZE);
+  create_matrix(&actual_info->collision_test_tetramino, TETR_SIZE, TETR_SIZE);
   actual_info->x_position = 0;
   actual_info->y_position = 0;
 
-  for (TetrominoType_t i = O_tetromino; i <= L_tetromino; i++) {
-    reset_matrix(actual_info->next_tetromino, TETR_SIZE, TETR_SIZE);
-    fill_tetromino(actual_info->next_tetromino, i);
+  for (TetraminoType_t i = O_tetramino; i <= L_tetramino; i++)
+  {
+    reset_matrix(actual_info->next_tetramino, TETR_SIZE, TETR_SIZE);
+    fill_tetramino(actual_info->next_tetramino, i);
   }
-  spawn_tetromino(actual_info);
+  spawn_tetramino(actual_info);
   int **temp;
   create_matrix(&temp, TETR_SIZE, TETR_SIZE);
-  fill_tetromino(temp, L_tetromino);
+  fill_tetramino(temp, L_tetramino);
 
-  for (int i = 0; i < TETR_SIZE; i++) {
-    for (int j = 0; j < TETR_SIZE; j++) {
-      ck_assert_int_eq(temp[i][j], actual_info->current_tetromino[i][j]);
+  for (int i = 0; i < TETR_SIZE; i++)
+  {
+    for (int j = 0; j < TETR_SIZE; j++)
+    {
+      ck_assert_int_eq(temp[i][j], actual_info->current_tetramino[i][j]);
     }
   }
 
@@ -79,16 +85,17 @@ START_TEST(spawn) {
   ck_assert_int_eq(actual_info->state, Moving);
 
   remove_matrix(&(actual_info)->field_base, FIELD_HEIGHT);
-  remove_matrix(&(actual_info)->current_tetromino, TETR_SIZE);
-  remove_matrix(&(actual_info)->next_tetromino, TETR_SIZE);
-  remove_matrix(&(actual_info)->collision_test_tetromino, TETR_SIZE);
+  remove_matrix(&(actual_info)->current_tetramino, TETR_SIZE);
+  remove_matrix(&(actual_info)->next_tetramino, TETR_SIZE);
+  remove_matrix(&(actual_info)->collision_test_tetramino, TETR_SIZE);
   remove_matrix(&temp, TETR_SIZE);
 
   free(actual_info);
 }
 END_TEST
 
-START_TEST(input) {
+START_TEST(input)
+{
   ModelInfo_t *actual_info = get_info();
   actual_info->pause = 1;
   actual_info->state = Pause_state;
@@ -101,7 +108,8 @@ START_TEST(input) {
 }
 END_TEST
 
-START_TEST(initialize) {
+START_TEST(initialize)
+{
   ModelInfo_t *actual_info = get_info();
   userInput(Start, true);
   actual_info->user_action = Start;
@@ -130,74 +138,84 @@ START_TEST(initialize) {
 }
 END_TEST
 
-START_TEST(shifting) {
+START_TEST(shifting)
+{
   ModelInfo_t *actual_info = get_info();
   actual_info->state = Moving;
   actual_info->x_position = 5, actual_info->y_position = 5;
   userInput(Left, true);
 
-  create_matrix(&actual_info->current_tetromino, TETR_SIZE, TETR_SIZE);
-  create_matrix(&actual_info->collision_test_tetromino, TETR_SIZE, TETR_SIZE);
-  fill_tetromino(actual_info->current_tetromino, I_tetromino);
-  move_tetromino(actual_info);
+  create_matrix(&actual_info->current_tetramino, TETR_SIZE, TETR_SIZE);
+  create_matrix(&actual_info->collision_test_tetramino, TETR_SIZE, TETR_SIZE);
+  fill_tetramino(actual_info->current_tetramino, I_tetramino);
+  move_tetramino(actual_info);
 
   ck_assert_int_eq(actual_info->x_position, 4);
   ck_assert_int_eq(actual_info->y_position, 5);
 
   actual_info->field_base[7][3] = 1, actual_info->field_base[7][9] = 1;
   userInput(Left, true);
-  move_tetromino(actual_info);
+  move_tetramino(actual_info);
   ck_assert_int_eq(actual_info->x_position, 4);
 
   userInput(Right, true);
-  move_tetromino(actual_info);
+  move_tetramino(actual_info);
   ck_assert_int_eq(actual_info->x_position, 5);
 
   userInput(Right, true);
-  move_tetromino(actual_info);
+  move_tetramino(actual_info);
   ck_assert_int_eq(actual_info->x_position, 5);
 
   userInput(Down, true);
-  move_tetromino(actual_info);
+  move_tetramino(actual_info);
   ck_assert_int_eq(actual_info->state, Shifting);
 
   actual_info->state = Moving;
   userInput(Action, true);
-  fill_tetromino(actual_info->collision_test_tetromino, J_tetromino);
-  move_tetromino(actual_info);
-  for (int i = 0; i < TETR_SIZE; i++) {
-    for (int j = 0; j < TETR_SIZE; j++) {
-      ck_assert_int_eq(actual_info->current_tetromino[i][j],
-                       actual_info->collision_test_tetromino[i][j]);
+  fill_tetramino(actual_info->collision_test_tetramino, J_tetramino);
+  move_tetramino(actual_info);
+  for (int i = 0; i < TETR_SIZE; i++)
+  {
+    for (int j = 0; j < TETR_SIZE; j++)
+    {
+      ck_assert_int_eq(actual_info->current_tetramino[i][j],
+                       actual_info->collision_test_tetramino[i][j]);
     }
   }
   userInput(Pause, true);
-  move_tetromino(actual_info);
+  move_tetramino(actual_info);
   ck_assert_int_eq(actual_info->state, Pause_state);
-  remove_matrix(&(actual_info)->current_tetromino, TETR_SIZE);
-  remove_matrix(&(actual_info)->collision_test_tetromino, TETR_SIZE);
+  remove_matrix(&(actual_info)->current_tetramino, TETR_SIZE);
+  remove_matrix(&(actual_info)->collision_test_tetramino, TETR_SIZE);
 }
 END_TEST
 
-START_TEST(clear_lines) {
+START_TEST(clear_lines)
+{
   int **temp_field;
   create_matrix(&temp_field, FIELD_HEIGHT, FIELD_WIDTH);
-  for (int i = FIELD_HEIGHT / 2; i < FIELD_HEIGHT; i++) {
-    for (int j = 0; j < FIELD_WIDTH; j++) {
+  for (int i = FIELD_HEIGHT / 2; i < FIELD_HEIGHT; i++)
+  {
+    for (int j = 0; j < FIELD_WIDTH; j++)
+    {
       temp_field[i][j] = 1;
     }
   }
 
   clear_line(temp_field, 14);
-  for (int i = 0; i < (FIELD_HEIGHT / 2) + 1; i++) {
-    for (int j = 0; j < FIELD_WIDTH; j++) {
+  for (int i = 0; i < (FIELD_HEIGHT / 2) + 1; i++)
+  {
+    for (int j = 0; j < FIELD_WIDTH; j++)
+    {
       ck_assert_int_eq(temp_field[i][j], 0);
     }
   }
 
   clear_line(temp_field, 14);
-  for (int i = 0; i < (FIELD_HEIGHT / 2) + 2; i++) {
-    for (int j = 0; j < FIELD_WIDTH; j++) {
+  for (int i = 0; i < (FIELD_HEIGHT / 2) + 2; i++)
+  {
+    for (int j = 0; j < FIELD_WIDTH; j++)
+    {
       ck_assert_int_eq(temp_field[i][j], 0);
     }
   }
@@ -206,7 +224,8 @@ START_TEST(clear_lines) {
 }
 END_TEST
 
-START_TEST(update_score_speed_level) {
+START_TEST(update_score_speed_level)
+{
   int *score = (int *)malloc(sizeof(int));
   *score = 100;
   update_score(score, 1);
@@ -245,20 +264,23 @@ START_TEST(update_score_speed_level) {
 
 END_TEST
 
-START_TEST(fsm) {
+START_TEST(fsm)
+{
   GameInfo_t test = {NULL, NULL, 0, 0, 1, 0, 0};
-  if (!test.field) create_matrix(&test.field, FIELD_HEIGHT, FIELD_WIDTH);
-  if (!test.next) create_matrix(&test.next, TETR_SIZE, TETR_SIZE);
+  if (!test.field)
+    create_matrix(&test.field, FIELD_HEIGHT, FIELD_WIDTH);
+  if (!test.next)
+    create_matrix(&test.next, TETR_SIZE, TETR_SIZE);
   ModelInfo_t *actual_info = (ModelInfo_t *)malloc(sizeof(ModelInfo_t));
   actual_info->state = Start_state;
   actual_info->user_action = Start;
   actual_info->hold = true;
   actual_info->field_base = NULL;
-  actual_info->next_tetromino = NULL;
-  actual_info->next_type = O_tetromino;
-  actual_info->current_tetromino = NULL;
-  actual_info->collision_test_tetromino = NULL;
-  actual_info->current_type = I_tetromino;
+  actual_info->next_tetramino = NULL;
+  actual_info->next_type = O_tetramino;
+  actual_info->current_tetramino = NULL;
+  actual_info->collision_test_tetramino = NULL;
+  actual_info->current_type = I_tetramino;
   actual_info->x_position = 5;
   actual_info->y_position = 5;
   actual_info->score = 0;
@@ -268,9 +290,9 @@ START_TEST(fsm) {
   actual_info->pause = 0;
   actual_info->timer = 1;
   create_matrix(&actual_info->field_base, FIELD_HEIGHT, FIELD_WIDTH);
-  create_matrix(&actual_info->next_tetromino, TETR_SIZE, TETR_SIZE);
-  create_matrix(&actual_info->current_tetromino, TETR_SIZE, TETR_SIZE);
-  create_matrix(&actual_info->collision_test_tetromino, TETR_SIZE, TETR_SIZE);
+  create_matrix(&actual_info->next_tetramino, TETR_SIZE, TETR_SIZE);
+  create_matrix(&actual_info->current_tetramino, TETR_SIZE, TETR_SIZE);
+  create_matrix(&actual_info->collision_test_tetramino, TETR_SIZE, TETR_SIZE);
 
   run_actions_by_state(actual_info);
   actual_info->state = Start_state;
@@ -326,15 +348,16 @@ START_TEST(fsm) {
   ck_assert_int_eq(actual_info->pause, -1);
   ck_assert_int_eq(actual_info->state, Exit_state);
   ck_assert_ptr_null(actual_info->field_base);
-  ck_assert_ptr_null(actual_info->current_tetromino);
-  ck_assert_ptr_null(actual_info->next_tetromino);
-  ck_assert_ptr_null(actual_info->collision_test_tetromino);
+  ck_assert_ptr_null(actual_info->current_tetramino);
+  ck_assert_ptr_null(actual_info->next_tetramino);
+  ck_assert_ptr_null(actual_info->collision_test_tetramino);
   free_result(&test);
   free(actual_info);
 }
 END_TEST
 
-Suite *tetris(void) {
+Suite *tetris(void)
+{
   Suite *suite = suite_create("tetris");
   TCase *tc_core = tcase_create("tetris");
 
